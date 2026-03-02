@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  MANAGER
+  EMPLOYEE
+}
+
+enum CommissionType {
+  PERCENT
+  FIXED
+}
+
+enum ExpenseCategory {
+  OIL
+  BASE
+  BOTTLE
+  PACKAGING
+  MARKETING
+  RENT
+  OTHER
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  telegramId   String    @unique
+  name         String
+  role         UserRole  @default(EMPLOYEE)
+  registeredAt DateTime  @default(now())
+  sales        Sale[]
+  logs         ActionLog[]
+}
+
+model SalesPoint {
+  id               Int              @id @default(autoincrement())
+  name             String
+  address          String
+  commissionType   CommissionType
+  commissionValue  Decimal          @db.Decimal(12, 2)
+  bottleSalePrice  Decimal          @db.Decimal(12, 2)
+  isActive         Boolean          @default(true)
+  isCentral        Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  inventories      Inventory[]
+  supplies         Supply[]
+  sales            Sale[]
+  cashCollections  CashCollection[]
+
+  @@index([isActive])
+}
+
+model Product {
+  id         Int         @id @default(autoincrement())
+  aromaName  String
+  volumeMl   Int
+  isActive   Boolean     @default(true)
+  inventories Inventory[]
+  supplies   Supply[]
+  sales      Sale[]
+
+  @@index([isActive])
+}
+
+model BatchCost {
+  id                  Int      @id @default(autoincrement())
+  oilMl               Decimal  @db.Decimal(12, 2)
+  baseMl              Decimal  @db.Decimal(12, 2)
+  oilPrice            Decimal  @db.Decimal(12, 2)
+  basePrice           Decimal  @db.Decimal(12, 2)
+  bottlePrice         Decimal  @db.Decimal(12, 2)
+  packagingPrice      Decimal  @db.Decimal(12, 2)
+  otherCosts          Decimal  @db.Decimal(12, 2)
+  yieldedBottles      Int
+  unitCost            Decimal  @db.Decimal(12, 2)
+  createdAt           DateTime @default(now())
+}
+
+model Inventory {
+  id        Int        @id @default(autoincrement())
+  pointId   Int
+  productId Int
+  quantity  Int        @default(0)
+  point     SalesPoint @relation(fields: [pointId], references: [id], onDelete: Cascade)
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([pointId, productId])
+}
+
+model Supply {
+  id         Int        @id @default(autoincrement())
+  pointId    Int
+  productId  Int
+  quantity   Int
+  date       DateTime
+  comment    String?
+  point      SalesPoint @relation(fields: [pointId], references: [id], onDelete: Cascade)
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Sale {
+  id               Int       @id @default(autoincrement())
+  pointId          Int
+  productId        Int
+  userId           Int?
+  quantitySold     Int
+  date             DateTime
+  saleAmount       Decimal   @db.Decimal(12, 2)
+  pointCommission  Decimal   @db.Decimal(12, 2)
+  grossProfit      Decimal   @db.Decimal(12, 2)
+  netProfit        Decimal   @db.Decimal(12, 2)
+  point            SalesPoint @relation(fields: [pointId], references: [id], onDelete: Cascade)
+  product          Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user             User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([date])
+}
+
+model CashCollection {
+  id        Int        @id @default(autoincrement())
+  pointId   Int
+  amount    Decimal    @db.Decimal(12, 2)
+  date      DateTime
+  period    String
+  comment   String?
+  point     SalesPoint @relation(fields: [pointId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id        Int            @id @default(autoincrement())
+  category  ExpenseCategory
+  amount    Decimal        @db.Decimal(12, 2)
+  date      DateTime
+  comment   String?
+}
+
+model ActionLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  action    String
+  entity    String
+  entityId  String?
+  payload   Json?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

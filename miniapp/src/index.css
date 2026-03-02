@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f7f3ee;
+  --card: #ffffff;
+  --soft: #f0e9df;
+  --line: #e8ddd1;
+  --text: #1e1812;
+  --muted: #7c6f60;
+  --accent: #9b7248;
+  --accent-light: #f5ede3;
+  --accent-dark: #7a5536;
+  --green: #2e7d52;
+  --green-bg: #eaf6ef;
+  --red: #c0392b;
+  --red-bg: #fdf0ee;
+  --blue: #1a6fa8;
+  --blue-bg: #eaf3fb;
+  --yellow: #b07d1a;
+  --yellow-bg: #fdf6e3;
+  --radius-card: 18px;
+  --radius-input: 12px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 2px 12px rgba(0,0,0,.04);
+  --shadow-fab: 0 4px 20px rgba(155,114,72,.45);
+}
+
+.dark {
+  --bg: #161412;
+  --card: #1f1d1a;
+  --soft: #28251f;
+  --line: #36302a;
+  --text: #f5ede3;
+  --muted: #a89a8a;
+  --accent: #c9966b;
+  --accent-light: #2e2218;
+  --accent-dark: #e0b893;
+  --green: #4caf7d;
+  --green-bg: #1a2e22;
+  --red: #e06050;
+  --red-bg: #2a1a18;
+  --blue: #5aabdb;
+  --blue-bg: #152030;
+  --yellow: #e0b840;
+  --yellow-bg: #2a2210;
+  --shadow-card: 0 1px 3px rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.2);
+  --shadow-fab: 0 4px 20px rgba(201,150,107,.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#root { min-height: 100vh; }
+
+/* ── Card ─────────────────────── */
+.card {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: var(--radius-card);
+  padding: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Input & select ───────────── */
+.input {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  background: var(--soft);
+  border-radius: var(--radius-input);
+  padding: 10px 13px;
+  outline: none;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.input::placeholder { color: var(--muted); }
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  background: var(--card);
+}
+.input:invalid.touched { border-color: var(--red); }
+
+/* ── Buttons ──────────────────── */
+.btn {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius-input);
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  letter-spacing: .01em;
+}
+.btn:active { transform: scale(.97); }
+.btn:hover  { background: var(--accent-dark); }
+
+.btn-secondary {
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-secondary:hover { background: var(--soft); }
+
+.btn-ghost {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.btn-ghost:hover { background: var(--soft); color: var(--text); }
+
+/* ── Form field wrapper ───────── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: .03em; text-transform: uppercase; }
+
+/* ── Section heading ──────────── */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--text);
+}
+
+/* ── Row item ─────────────────── */
+.row-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--soft);
+  border-radius: 13px;
+  padding: 10px 12px;
+  transition: background .15s;
+}
+
+/* ── Badge ────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 7px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-a  { background: var(--green-bg);  color: var(--green); }
+.badge-b  { background: var(--yellow-bg); color: var(--yellow); }
+.badge-c  { background: var(--red-bg);    color: var(--red); }
+.badge-neutral { background: var(--soft); color: var(--muted); }
+
+/* ── Spinner ──────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+/* ── Pill tabs ────────────────── */
+.pill-tab {
+  white-space: nowrap;
+  border-radius: 40px;
+  border: 1.5px solid transparent;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.pill-tab-active {
+  background: var(--accent);
+  color: #fff;
+}
+.pill-tab-inactive {
+  border-color: var(--line);
+  background: var(--card);
+  color: var(--muted);
+}
+.pill-tab-inactive:hover { background: var(--soft); color: var(--text); }
+
+/* ── Stat card ────────────────── */
+.stat-card {
+  border-radius: var(--radius-card);
+  padding: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Toast/alert ──────────────── */
+.toast-error {
+  background: var(--red-bg);
+  border: 1px solid color-mix(in srgb, var(--red) 25%, transparent);
+  color: var(--red);
+  border-radius: 13px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── Chart tooltips ───────────── */
+.recharts-tooltip-wrapper { outline: none; }
+.recharts-default-tooltip {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+}
+
