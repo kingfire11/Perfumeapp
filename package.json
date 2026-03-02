@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Perfume Bot - Telegram Mini App",
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.12.0 || >=20.19.0",
     "npm": ">=9.0.0"
   },
   "workspaces": [
@@ -11,7 +11,6 @@
     "miniapp"
   ],
   "scripts": {
-    "install": "npm ci",
     "build": "npm run build -w miniapp && npm run build -w backend",
     "dev": "npm run dev -w miniapp",
     "start": "npm start -w backend"
