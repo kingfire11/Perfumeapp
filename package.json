@@ -2,10 +2,20 @@
   "name": "parfumebot",
   "version": "1.0.0",
   "description": "Perfume Bot - Telegram Mini App",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "workspaces": [
     "backend",
     "miniapp"
   ],
+  "scripts": {
+    "install": "npm ci",
+    "build": "npm run build -w miniapp && npm run build -w backend",
+    "dev": "npm run dev -w miniapp",
+    "start": "npm start -w backend"
+  },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@tailwindcss/vite": "^4.2.1",

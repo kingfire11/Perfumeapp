@@ -2,10 +2,10 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm install && npm run build"
+    "buildCommand": "npm install && npm run build -w miniapp"
   },
   "deploy": {
-    "startCommand": "npm run preview -- --host 0.0.0.0 --port $PORT",
+    "startCommand": "npm run preview -w miniapp -- --host 0.0.0.0 --port $PORT",
     "restartPolicyType": "ON_FAILURE"
   }
 }
